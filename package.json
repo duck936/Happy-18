@@ -1,0 +1,10 @@
+{
+  "name": "happy-birthday",
+  "version": "1.0.0",
+  "description": "موقع عيد ميلاد 18 سعيد",
+  "scripts": {
+    "start": "live-server"
+  },
+  "author": "سيف",
+  "license": "MIT"
+}

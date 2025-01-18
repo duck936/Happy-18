@@ -150,9 +150,9 @@ function startMemoryGame() {
     }
 }
 
-// لعبة السرعة
+// لعبة الصيد
 function startReactionGame() {
-    // إنشاء عنصر للعبة السرعة
+    // إنشاء عنصر للعبة
     const reactionGame = document.createElement('div');
     reactionGame.id = 'reaction-game';
     reactionGame.style.position = 'relative';
@@ -163,54 +163,72 @@ function startReactionGame() {
     reactionGame.style.margin = '20px auto';
     document.body.appendChild(reactionGame);
 
-    let startTime;
-    let timeoutId;
+    // عدد النقرات المطلوبة
+    const requiredClicks = 5;
+    let clickCount = 0;
 
-    // بدء اللعبة
-    function startRound() {
-        // إخفاء الشكل القديم لو موجود
-        const oldShape = document.querySelector('.shape');
-        if (oldShape) oldShape.remove();
+    // الوقت المحدد
+    const timeLimit = 10; // 10 ثواني
+    let timeLeft = timeLimit;
 
-        // إنشاء شكل جديد (دائرة أو مربع)
-        const shape = document.createElement('div');
-        shape.classList.add('shape');
-        shape.style.width = '50px';
-        shape.style.height = '50px';
-        shape.style.backgroundColor = '#8a2be2';
-        shape.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        shape.style.position = 'absolute';
-        shape.style.top = `${Math.random() * 250}px`;
-        shape.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
-        shape.style.cursor = 'pointer';
-        reactionGame.appendChild(shape);
+    // إنشاء الإيموجي
+    const emoji = document.createElement('div');
+    emoji.textContent = '🎁';
+    emoji.style.position = 'absolute';
+    emoji.style.fontSize = '2rem';
+    emoji.style.cursor = 'pointer';
+    reactionGame.appendChild(emoji);
 
-        // بدء قياس الوقت
-        startTime = new Date().getTime();
+    // إنشاء عداد النقرات
+    const clickCounter = document.createElement('div');
+    clickCounter.textContent = `النقرات: ${clickCount}/${requiredClicks}`;
+    clickCounter.style.marginTop = '20px';
+    clickCounter.style.fontSize = '1.2rem';
+    reactionGame.appendChild(clickCounter);
 
-        // إضافة حدث الضغط على الشكل
-        shape.addEventListener('click', () => {
-            const endTime = new Date().getTime();
-            const reactionTime = (endTime - startTime) / 1000; // الوقت بالثواني
-            if (reactionTime < 1) {
-                alert(`سرعة رهيبة! وقت رد فعلك: ${reactionTime.toFixed(2)} ثانية.`);
-                keysCollected++;
-                document.getElementById('key-count').textContent = keysCollected;
-                checkKeys();
+    // إنشاء عداد الوقت
+    const timer = document.createElement('div');
+    timer.textContent = `الوقت المتبقي: ${timeLeft} ثواني`;
+    timer.style.marginTop = '10px';
+    timer.style.fontSize = '1.2rem';
+    reactionGame.appendChild(timer);
+
+    // تحريك الإيموجي كل ثانية
+    const moveEmoji = setInterval(() => {
+        const x = Math.random() * (reactionGame.offsetWidth - 50);
+        const y = Math.random() * (reactionGame.offsetHeight - 50);
+        emoji.style.left = `${x}px`;
+        emoji.style.top = `${y}px`;
+    }, 1000);
+
+    // بدء العد التنازلي
+    const countdown = setInterval(() => {
+        timeLeft--;
+        timer.textContent = `الوقت المتبقي: ${timeLeft} ثواني`;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            clearInterval(moveEmoji);
+            if (clickCount < requiredClicks) {
+                alert("للأسف، الوقت خلص! حاول تاني.");
                 reactionGame.remove(); // إزالة اللعبة بعد الانتهاء
-            } else {
-                alert(`حاول تاني! وقت رد فعلك: ${reactionTime.toFixed(2)} ثانية.`);
-                startRound(); // إعادة اللعبة
             }
-        });
+        }
+    }, 1000);
 
-        // إنهاء الجولة بعد 3 ثواني لو المستخدم ما داسش
-        timeoutId = setTimeout(() => {
-            alert("للأسف، الوقت خلص!");
-            startRound(); // إعادة اللعبة
-        }, 3000);
-    }
+    // إضافة حدث النقر على الإيموجي
+    emoji.addEventListener('click', () => {
+        clickCount++;
+        clickCounter.textContent = `النقرات: ${clickCount}/${requiredClicks}`;
 
-    // بدء الجولة الأولى
-    startRound();
-}
+        if (clickCount >= requiredClicks) {
+            clearInterval(countdown);
+            clearInterval(moveEmoji);
+            alert(`مبروك! انت كسبت في لعبة الصيد.`);
+            keysCollected++;
+            document.getElementById('key-count').textContent = keysCollected;
+            checkKeys();
+            reactionGame.remove(); // إزالة اللعبة بعد الانتهاء
+        }
+    });
+                                  }

@@ -1,50 +1,99 @@
+/* ملف styles.css */
+
+/* الخطوط من Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #ffccf5; /* لون بينك فاتح */
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* خلفية بتدرج بينك */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
 .background {
     text-align: center;
+    position: relative;
 }
 
-.card {
+/* تأثير الكونفيتي (اختياري) */
+.background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('confetti.png') repeat; /* صورة كونفيتي */
+    opacity: 0.3;
+    z-index: -1;
+}
+
+.card, .next-card {
     background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     max-width: 400px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
-.next-card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    margin: 20px auto;
+.cake h1 {
+    font-size: 2rem;
+    color: #ff6f61; /* لون بينك */
+    margin-bottom: 20px;
+}
+
+.cake img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.wish-box {
+    margin-top: 20px;
+}
+
+.wish-box input {
+    width: 80%;
+    padding: 10px;
+    border: 2px solid #ff6f61;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.wish-box button, #next-page-button {
+    background-color: #8a2be2; /* لون بنفسجي */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.wish-box button:hover, #next-page-button:hover {
+    background-color: #7b1fa2; /* لون بنفسجي غامق */
 }
 
 .hidden {
     display: none;
 }
 
-button {
-    background-color: #8a2be2; /* لون بنفسجي */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+/* تأثيرات إضافية */
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
 }
 
-button:hover {
-    background-color: #7b1fa2;
+.cake img {
+    animation: float 3s ease-in-out infinite;
 }
